@@ -52,9 +52,6 @@ public class ContractServiceImpl implements ContractService {
 
     @Override
     public List<Contract> getAllContracts() {
-        if (contractRepository.findAll().isEmpty()) {
-            throw new IllegalArgumentException("No contract found");
-        }
         return contractRepository.findAll();
     }
 

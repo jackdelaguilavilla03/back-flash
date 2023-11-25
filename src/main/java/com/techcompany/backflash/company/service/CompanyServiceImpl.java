@@ -59,9 +59,6 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public List<Company> getAllCompanies() {
-        if (companyRepository.findAll().isEmpty()){
-            throw  new IllegalArgumentException("No Companies");
-        }
         return companyRepository.findAll();
     }
 

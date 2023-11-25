@@ -49,9 +49,6 @@ public class ClientServicesImpl implements ClientService {
 
   @Override
   public List<Client> getAllClients() {
-    if (clientRepository.findAll().isEmpty()) {
-      throw new IllegalArgumentException("No clients found");
-    }
     return clientRepository.findAll();
   }
 
