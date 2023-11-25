@@ -30,8 +30,7 @@ public class ClientServicesImpl implements ClientService {
         client.getUser_name(),
         client.getUser_description());
 
-    Client savedClient = clientRepository.save(newClient);
-    return savedClient;
+      return clientRepository.save(newClient);
   }
 
   @Override
