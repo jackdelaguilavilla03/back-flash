@@ -59,33 +59,38 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Override
-    public Contract updateContract(String id, Contract contract) {
-        if (contractRepository.findById(id).isEmpty()) {
+    public Contract updateContract(String id, Contract updatedContract) {
+        Optional<Contract> optionalContract = contractRepository.findById(id);
+
+        if (optionalContract.isEmpty()) {
             throw new IllegalArgumentException("Contract not found");
         }
-        Contract newContract = new Contract(
-                contract.getClientId(),
-                contract.getCompanyId(),
-                contract.getNombre(),
-                contract.getFoto(),
-                contract.getNombreServicio(),
-                contract.getFechaHoy(),
-                contract.getServicios(),
-                contract.getDireccionEntrega(),
-                contract.getDireccionDestino(),
-                contract.getFechaServicio(),
-                contract.getHoraServicio(),
-                contract.getNumeroTarjeta(),
-                contract.getCvvTarjeta(),
-                contract.getVencimientoTarjeta(),
-                contract.getEstado(),
-                contract.getRejectedPermanent(),
-                contract.getCostoServicio(),
-                contract.getAceptado(),
-                contract.getEstadoPermanente()
-        );
-        return contractRepository.save(newContract);
+
+        Contract existingContract = optionalContract.get();
+
+        existingContract.setClientId(updatedContract.getClientId());
+        existingContract.setCompanyId(updatedContract.getCompanyId());
+        existingContract.setNombre(updatedContract.getNombre());
+        existingContract.setFoto(updatedContract.getFoto());
+        existingContract.setNombreServicio(updatedContract.getNombreServicio());
+        existingContract.setFechaHoy(updatedContract.getFechaHoy());
+        existingContract.setServicios(updatedContract.getServicios());
+        existingContract.setDireccionEntrega(updatedContract.getDireccionEntrega());
+        existingContract.setDireccionDestino(updatedContract.getDireccionDestino());
+        existingContract.setFechaServicio(updatedContract.getFechaServicio());
+        existingContract.setHoraServicio(updatedContract.getHoraServicio());
+        existingContract.setNumeroTarjeta(updatedContract.getNumeroTarjeta());
+        existingContract.setCvvTarjeta(updatedContract.getCvvTarjeta());
+        existingContract.setVencimientoTarjeta(updatedContract.getVencimientoTarjeta());
+        existingContract.setEstado(updatedContract.getEstado());
+        existingContract.setRejectedPermanent(updatedContract.getRejectedPermanent());
+        existingContract.setCostoServicio(updatedContract.getCostoServicio());
+        existingContract.setAceptado(updatedContract.getAceptado());
+        existingContract.setEstadoPermanente(updatedContract.getEstadoPermanente());
+
+        return contractRepository.save(existingContract);
     }
+
 
     @Override
     public void deleteContract(String id) {

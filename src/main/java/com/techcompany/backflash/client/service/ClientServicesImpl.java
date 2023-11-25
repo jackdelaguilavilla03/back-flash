@@ -51,25 +51,29 @@ public class ClientServicesImpl implements ClientService {
   }
 
   @Override
-  public Client updateClient(String id,Client client) {
-    if (clientRepository.findById(id).isEmpty()) {
+  public Client updateClient(String id, Client updatedClient) {
+    Optional<Client> optionalClient = clientRepository.findById(id);
+
+    if (optionalClient.isEmpty()) {
       throw new IllegalArgumentException("Client not found");
     }
-    Client updatedClient = new Client(
-        client.getEmail(),
-        client.getCelular(),
-        client.getPassword(),
-        client.getFullname(),
-        client.getBirthdate(),
-        client.getIdNumber(),
-        client.getCountry(),
-        client.getPhoto(),
-        client.getUser_name(),
-        client.getUser_description());
 
-    Client savedClient = clientRepository.save(updatedClient);
-    return savedClient;
+    Client existingClient = optionalClient.get();
+
+    existingClient.setEmail(updatedClient.getEmail());
+    existingClient.setCelular(updatedClient.getCelular());
+    existingClient.setPassword(updatedClient.getPassword());
+    existingClient.setFullname(updatedClient.getFullname());
+    existingClient.setBirthdate(updatedClient.getBirthdate());
+    existingClient.setIdNumber(updatedClient.getIdNumber());
+    existingClient.setCountry(updatedClient.getCountry());
+    existingClient.setPhoto(updatedClient.getPhoto());
+    existingClient.setUser_name(updatedClient.getUser_name());
+    existingClient.setUser_description(updatedClient.getUser_description());
+
+      return clientRepository.save(existingClient);
   }
+
 
   @Override
   public void deleteClient(String id) {
