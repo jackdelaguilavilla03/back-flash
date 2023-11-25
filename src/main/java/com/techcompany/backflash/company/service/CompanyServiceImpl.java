@@ -12,18 +12,13 @@ import java.util.Optional;
 @Service
 public class CompanyServiceImpl implements CompanyService {
     private final CompanyRepository companyRepository;
-    private final ClientRepository clientRepository;
 
     public CompanyServiceImpl(CompanyRepository companyRepository, ClientRepository clientRepository) {
         this.companyRepository = companyRepository;
-        this.clientRepository = clientRepository;
     }
 
     @Override
     public Company createCompany(Company createCompany) {
-        if (companyRepository.existsByEmail(createCompany.getEmail()) || clientRepository.existsByEmail(createCompany.getEmail())) {
-            throw new IllegalArgumentException("Email already exists");
-        }
         Company newCompany = new Company(
                 createCompany.getEmail(),
                 createCompany.getCelular(),
