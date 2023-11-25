@@ -1,5 +1,6 @@
 package com.techcompany.backflash.company.service;
 
+import com.techcompany.backflash.client.repositories.ClientRepository;
 import com.techcompany.backflash.company.domain.model.Company;
 import com.techcompany.backflash.company.domain.service.CompanyService;
 import com.techcompany.backflash.company.repositories.CompanyRepository;
@@ -11,36 +12,42 @@ import java.util.Optional;
 @Service
 public class CompanyServiceImpl implements CompanyService {
     private final CompanyRepository companyRepository;
+    private final ClientRepository clientRepository;
 
-    public CompanyServiceImpl(CompanyRepository companyRepository) {
+    public CompanyServiceImpl(CompanyRepository companyRepository, ClientRepository clientRepository) {
         this.companyRepository = companyRepository;
+        this.clientRepository = clientRepository;
     }
 
     @Override
-    public Company createCompany(Company company) {
+    public Company createCompany(Company createCompany) {
+        if (companyRepository.existsByEmail(createCompany.getEmail()) || clientRepository.existsByEmail(createCompany.getEmail())) {
+            throw new IllegalArgumentException("Email already exists");
+        }
         Company newCompany = new Company(
-                company.getEmail(),
-                company.getCelular(),
-                company.getPassword(),
-                company.getFullname(),
-                company.getBirthdate(),
-                company.getAge(),
-                company.getIdNumber(),
-                company.getCountry(),
-                company.getCountry(),
-                company.getPhoto(),
-                company.getTime(),
-                company.getLicense(),
-                company.getSoat(),
-                company.getProperty_document(),
-                company.getCertificate(),
-                company.getPhotovehicle(),
-                company.getPhotovehicle2(),
-                company.getUser_name(),
-                company.getUser_description()
+                createCompany.getEmail(),
+                createCompany.getCelular(),
+                createCompany.getPassword(),
+                createCompany.getFullname(),
+                createCompany.getBirthdate(),
+                createCompany.getAge(),
+                createCompany.getIdNumber(),
+                createCompany.getCountry(),
+                createCompany.getPhoto(),
+                createCompany.getJob(),
+                createCompany.getTime(),
+                createCompany.getLicense(),
+                createCompany.getSoat(),
+                createCompany.getProperty_document(),
+                createCompany.getCertificate(),
+                createCompany.getPhotovehicle(),
+                createCompany.getPhotovehicle2(),
+                createCompany.getUser_name(),
+                createCompany.getUser_description()
         );
         return companyRepository.save(newCompany);
     }
+
 
     @Override
     public Optional<Company> getCompanyById(String id) {
@@ -61,10 +68,6 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public Company updateCompany(String id, Company updatedCompany) {
         Optional<Company> optionalCompany = companyRepository.findById(id);
-
-        if (optionalCompany.isEmpty()) {
-            throw new IllegalArgumentException("Company not found");
-        }
 
         Company existingCompany = optionalCompany.get();
 

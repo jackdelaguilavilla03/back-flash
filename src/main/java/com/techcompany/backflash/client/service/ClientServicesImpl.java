@@ -6,18 +6,24 @@ import java.util.Optional;
 import com.techcompany.backflash.client.domain.model.Client;
 import com.techcompany.backflash.client.domain.services.ClientService;
 import com.techcompany.backflash.client.repositories.ClientRepository;
+import com.techcompany.backflash.company.repositories.CompanyRepository;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ClientServicesImpl implements ClientService {
   private final ClientRepository clientRepository;
+  private final CompanyRepository companyRepository;
 
-  public ClientServicesImpl(ClientRepository clientRepository) {
+  public ClientServicesImpl(ClientRepository clientRepository, CompanyRepository companyRepository) {
     this.clientRepository = clientRepository;
+    this.companyRepository = companyRepository;
   }
 
   @Override
   public Client createClient(Client client) {
+    if (clientRepository.existsByEmail(client.getEmail()) || companyRepository.existsByEmail(client.getEmail())) {
+      throw new IllegalArgumentException("Email already exists");
+    }
     Client newClient = new Client(
         client.getEmail(),
         client.getCelular(),
